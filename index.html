@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+    <link rel="stylesheet" href="style.css" class="resource">
+    <link rel="stylesheet" href="media.css" class="resource">
+    <link rel="icon" type="image/png" href="img/lanqiu2.png">
+
+</head>
+<body>
+    <div id="StartPage">
+        <h1>节奏篮球</h1>
+        <p>作者: 海曦 &nbsp;|&nbsp; 
+            <a class="social-link icon-github" href="https://github.com/HaiXi2912"></a>
+            <a class="social-link icon-gitee" href="http://gitee.com/Hai_Xi"></a>
+        </a></p>
+        <p>&nbsp;</p>
+        <p>操作: &nbsp;&nbsp;<span class="key-left"></span> <span class="key-right"></span> 反弹篮球 &nbsp;&nbsp;<span class="keybox">空格键</span> 暂停</p>
+        <p>&nbsp;</p>
+        <p>重要说明：不建议在作品展示查看作品 </p>
+        <p>请在 <span class="keybox">作品展示</span> 的  <span class="keybox">浏览作品</span>查看</p>
+        <p>&nbsp;</p>
+        <p>游戏对不同屏幕适配有所不同，<br><br>推荐设置：<span class="keybox">1080p 100%缩放</span> 或 <span class="keybox">1440p 150%缩放</span> 以获得最佳体验</p>
+        <p>&nbsp;</p>
+        <p class="tips-big" id="loadtips">
+
+正在下载资源... 0%
+            
+        </p>
+        <p></p>
+        <div id="tipsbar" class="up">
+            <div id="tipsbar-in"></div>
+        </div>
+    </div>
+    <div id="home">
+        <h1>节奏篮球</h1>
+        <div id="contents"></div>
+        <div id="MusicName">只因你太美</div>
+        <div id="MusicInfo">难度: 简单 &nbsp;&nbsp; 时长: 100秒 &nbsp;&nbsp; 最高分: 0</div>
+        <div class="dots"></div>
+        <p id="hometips"><span class="key-left"></span> <span class="key-right"></span> &nbsp;选择曲子&nbsp; | &nbsp;<span class="keybox anm-onclicktips">空格键</span>&nbsp;开始游戏</p>
+    
+    </div>
+    <div id="game">
+
+        <div id="gametime">
+            <div id="gametime-center"></div>
+        </div>
+
+        <div id="PausePage" class="PausePageOut">
+            <h1>已暂停</h1>
+            <p style="position: absolute;top: 80%;">按 <span class="keybox anm-onclicktips">空格键</span> 继续</p>
+        </div>
+
+        <div id="CountDown">
+            <h1>&nbsp;</h1>
+            <h1 id="CountDownNum">0</h1>
+        </div>
+
+        <div id="GameOverPage">
+            <h1>游戏结束</h1>
+            <p>得分: <span id="score-num"></span></p>
+            <p style="position: absolute;top: 80%;">按 <span class="keybox anm-onclicktips">空格键</span> 继续</p>
+        </div>
+
+
+        <div id="rating-center" class="center-display"></div>
+<div id="combo-center" class="center-display"></div>
+
+        <div id="player" class="idle"></div>
+        <div id="scoreboard">
+            <div id="score"></div>
+        </div>
+    </div>
+    <audio id="bg-music" src="Sound/只因你太美.mp3" class="resource"></audio>
+    <audio id="hit-sound" src="Sound/hit.mp3" class="resource"></audio>
+    <audio id="miss-sound" src="Sound/hit1.mp3" class="resource"></audio>
+    <audio id="audioPlayer" loop></audio>
+    <audio src="Sound/只因你太美.mp3" class="resource"></audio>
+    <audio src="Sound/Illusionary Daytime.mp3" class="resource"></audio>
+    <audio src="Sound/精卫.mp3" class="resource"></audio>
+    <audio src="Sound/Gee.mp3" class="resource"></audio>
+    <script src="sounddata.js"></script>
+    <script src="script.js"></script>
+    
+    <style>
+
+    </style>
+    
+</html>

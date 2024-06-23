@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编曲网页</title>
+    <style>
+        #keyPressTimeline div {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 2px;
+            border: 1px solid #888;
+            background-color: #ddd;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+        }
+        .key-0 { background-color: #eee; } /* No key */
+        .key--1 { background-color: #bfa; } /* Left key */
+        .key-1 { background-color: #afb; } /* Right key */
+        .key-2 { background-color: #faa; } /* Both keys */
+        .selected { border: 2px solid #000; } /* Selected key */
+    </style>
+</head>
+<body>
+    <h1>编曲网页</h1>
+    <input type="file" id="musicFile" accept="audio/*">
+    <br>
+    <label>曲子名字: <input type="text" id="musicName"></label>
+    <br>
+    <label>曲子时长: <input type="number" id="musicTime"></label>
+    <br>
+    <label>曲子难度: <input type="text" id="musicDifficulty"></label>
+    <br>
+    <label>节拍 (BPM): <input type="number" id="bpm" value="4"></label>
+    <br>
+    <button id="startBtn">开始编曲</button>
+    <button id="exportBtn">导出编曲</button>
+    <audio id="audioPlayer" controls></audio>
+    <div id="keyPressTimeline"></div>
+    <script>
+        let bpm;
+        let arranger = [];
+        let keysPressed = {};
+        let audio = document.getElementById('audioPlayer');
+        let timelineInterval;
+        let currentBeatIndex = 0;
+    
+        document.getElementById('musicFile').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            audio.src = URL.createObjectURL(file);
+            audio.onloadedmetadata = function() {
+                initializeArranger(audio.duration);
+            };
+        });
+    
+        document.getElementById('startBtn').addEventListener('click', function() {
+            bpm = parseInt(document.getElementById('bpm').value);
+            initializeArranger(audio.duration);
+            audio.play();
+            synchronizeTimeline();
+        });
+    
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const name = document.getElementById('musicName').value;
+            const time = document.getElementById('musicTime').value;
+            const difficulty = document.getElementById('musicDifficulty').value;
+            const exportData = {
+                name: name,
+                time: time,
+                difficulty: difficulty,
+                bpm: bpm,
+                arranger: arranger
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", name + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        });
+    
+        function initializeArranger(duration) {
+            const totalBeats = Math.floor(duration * bpm);
+            arranger = new Array(totalBeats).fill(0);
+            renderKeyPressTimeline();
+        }
+    
+        function renderKeyPressTimeline() {
+            const keyPressTimeline = document.getElementById('keyPressTimeline');
+            keyPressTimeline.innerHTML = '';
+            arranger.forEach((key, index) => {
+                const keyDiv = document.createElement('div');
+                keyDiv.textContent = key === 0 ? '' : key;
+                keyDiv.className = 'key-' + key;
+                keyDiv.onclick = () => selectBeat(index);
+                keyPressTimeline.appendChild(keyDiv);
+            });
+        }
+    
+        function selectBeat(index) {
+            currentBeatIndex = index;
+            audio.currentTime = index / bpm;
+        }
+    
+        function synchronizeTimeline() {
+            clearInterval(timelineInterval);
+            timelineInterval = setInterval(() => {
+                const currentBeat = Math.floor(audio.currentTime * bpm);
+                currentBeatIndex = currentBeat;
+                highlightCurrentBeat(currentBeat);
+            }, 1000 / Math.max(bpm, 1));
+        }
+    
+        function highlightCurrentBeat(currentBeat) {
+            const beats = document.querySelectorAll('#keyPressTimeline div');
+            beats.forEach(div => div.classList.remove('selected'));
+            if (beats[currentBeat]) {
+                beats[currentBeat].classList.add('selected');
+            }
+        }
+    
+        window.addEventListener('keydown', function(event) {
+    if (!keysPressed[event.key]) {
+        keysPressed[event.key] = true;
+        updateCurrentBeat();
+    }
+});
+
+window.addEventListener('keyup', function(event) {
+    delete keysPressed[event.key];
+});
+
+    
+        function updateCurrentBeat() {
+    if (keysPressed['z']) {
+        arranger[currentBeatIndex] = 2; // Record as 2 when 'z' is pressed
+    } else if (keysPressed['ArrowLeft']) {
+        arranger[currentBeatIndex] = -1; // Left key
+    } else if (keysPressed['ArrowRight']) {
+        arranger[currentBeatIndex] = 1; // Right key
+    } else {
+        arranger[currentBeatIndex] = 0; // No key pressed
+    }
+    renderKeyPressTimeline();
+}
+
+    </script>
+    
+</body>
+</html>
